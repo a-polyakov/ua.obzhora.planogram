@@ -1,0 +1,4 @@
+function adhesionShelf(shelf)
+{
+//	for ()
+}

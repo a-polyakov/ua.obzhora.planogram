@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM
+		"http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p %-50c %-10M %-3L %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="MODEL" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/planogramModel.log"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p %-50c %-10M %-3L %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="CONTROLLER" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/planogramController.log"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p %-50c %-10M %-3L %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="PLANOGRAM" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/planogram.log"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p %-50c %-10M %-3L %m%n"/>
+		</layout>
+	</appender>
+
+	<logger name="planograma.model" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="MODEL"/>
+	</logger>
+
+	<logger name="planograma.servlet" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="CONTROLLER"/>
+	</logger>
+
+	<root>
+		<priority value="info"/>
+		<!--<appender-ref ref="CONSOLE"/>-->
+		<appender-ref ref="PLANOGRAM"/>
+	</root>
+
+</log4j:configuration>

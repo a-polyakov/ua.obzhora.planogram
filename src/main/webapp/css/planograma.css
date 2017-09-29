@@ -1,0 +1,186 @@
+html, body{
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+table, tr, th, td
+{
+	margin: 0px;
+	padding: 0px;
+	border-spacing:0px;
+}
+#login {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+#loading {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	opacity: 0.5;
+}
+.frame{
+	width: 100%;
+	height: 100%;
+	border-spacing:0px;
+}
+.path{
+	background: #dcdcdc;
+	padding: 0px;
+	height: 25px;
+	font-size: 14px;
+	font-family: monospace;
+}
+.path i{
+	white-space:nowrap;
+	padding: 3px 5px 3px 5px;
+}
+.path a{
+	color: #5555bb;
+	white-space:nowrap;
+	text-decoration: none;
+	padding: 3px 5px 3px 5px;
+}
+.path a:hover{
+	background: #808080;
+	color: white;
+}
+.content{
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+}
+.menu{
+	height: 100%;
+	border-spacing:8px;
+	font-size: 12px;
+	font-family: monospace;
+}
+.menu a{
+	background: #dcdcdc;
+	color: #5555bb;
+	white-space:nowrap;
+	text-decoration: none;
+	padding: 3px 5px 3px 5px;
+}
+.menu a:not(.disabled){
+	color: #5555bb;
+}
+.menu a.disabled{
+	color: #808080;
+	cursor: default;
+}
+.menu a.disabled.notReady{
+	color: red;
+}
+.menu a:not(.disabled):hover{
+	background: #808080;
+	color: white;
+}
+#edit_canvas{
+	border: 1px solid black;
+}
+#preview_canvas{
+	border: 1px solid black;
+}
+
+td.scale{
+	background: #dcdcdc;
+	color: #5555bb;
+	width: 50%;
+	/*white-space:nowrap;*/
+	/*text-decoration: none;*/
+	font-size: 16px;
+	font-family: monospace;
+	text-align: center;
+	/*border-spacing:2px;*/
+	margin: 2px;
+	border-left-width: 2px;
+	/*border-width: 2px;*/
+	/*padding: 0px 25px 0px 25px;*/
+}
+td.scale:hover{
+	background: #808080;
+	color: white;
+}
+
+#rackTemplate{
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+#basketPanel{
+	height:250px;
+	overflow-y: auto;
+}
+#basketPanelTable{
+	display: none;
+	height:250px;
+	overflow-y: auto;
+}
+#choiceWares{
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+input.basket
+{
+	background-color: red;
+	border: 3px solid white;
+}
+input.basketSelect
+{
+	background-color: red;
+	border: 3px solid blue;
+}
+
+
+
+
+
+/*text-transform: uppercase; для path
+padding: 8px 17px 8px 15px;
+    font-weight: bold;
+    color: white;
+
+    background: white url(images/navlink.gif) right;
+background-image: url(http://xtemplate.ru/prosmotr/wp-content/themes/revolution_city_gray/images/navlink.gif);
+background-repeat-x: initial;
+background-repeat-y: initial;
+background-attachment: initial;
+background-position-x: 100%;
+background-position-y: 50%;
+background-origin: initial;
+background-clip: initial;
+background-color: white;
+
+background: white url(images/navbar.gif);
+background-image: url(http://xtemplate.ru/prosmotr/wp-content/themes/revolution_city_gray/images/navbar.gif);
+background-repeat-x: initial;
+background-repeat-y: initial;
+background-attachment: initial;
+background-position-x: initial;
+background-position-y: initial;
+background-origin: initial;
+background-clip: initial;
+background-color: white;
+
+    */

@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+	<script type="text/javascript" src="js/planogram2D.js"></script>
+</head>
+<body>
+<style type="text/css">
+	html, body {
+		width: 100%;
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+	}
+</style>
+<canvas id='edit_canvas' width="320" height="200">canvas not supported</canvas>
+
+
+<script type="text/javascript">
+window.table = {s:20};
+window.oList = [
+	{x:1, y:1, s:1, angle:0},
+	{x:3, y:1, s:1, angle:0},
+	{x:5, y:1, s:1, angle:0},
+	{x:7, y:1, s:1, angle:0},
+	{x:9, y:1, s:1, angle:0},
+	{x:11, y:1, s:1, angle:0},
+	{x:13, y:1, s:1, angle:0},
+	{x:15, y:1, s:1, angle:0},
+	{x:17, y:1, s:1, angle:0},
+	{x:19, y:1, s:1, angle:0},
+	{x:1, y:3, s:1, angle:0},
+	{x:3, y:3, s:1, angle:0},
+	{x:5, y:3, s:1, angle:0},
+	{x:7, y:3, s:1, angle:0},
+	{x:9, y:3, s:1, angle:0},
+	{x:11, y:3, s:1, angle:0},
+	{x:13, y:3, s:1, angle:0},
+	{x:15, y:3, s:1, angle:0},
+	{x:17, y:3, s:1, angle:0},
+	{x:19, y:3, s:1, angle:0},
+	{x:1, y:5, s:1, angle:0},
+	{x:3, y:5, s:1, angle:0},
+	{x:5, y:5, s:1, angle:0},
+	{x:7, y:5, s:1, angle:0},
+	{x:9, y:5, s:1, angle:0},
+	{x:11, y:5, s:1, angle:0},
+	{x:13, y:5, s:1, angle:0},
+	{x:15, y:5, s:1, angle:0},
+	{x:17, y:5, s:1, angle:0},
+	{x:19, y:5, s:1, angle:0},
+	{x:1, y:7, s:1, angle:0},
+	{x:3, y:7, s:1, angle:0},
+	{x:5, y:7, s:1, angle:0},
+	{x:7, y:7, s:1, angle:0},
+	{x:9, y:7, s:1, angle:0},
+	{x:11, y:7, s:1, angle:0},
+	{x:13, y:7, s:1, angle:0},
+	{x:15, y:7, s:1, angle:0},
+	{x:17, y:7, s:1, angle:0},
+	{x:19, y:7, s:1, angle:0},
+	{x:10, y:10, s:2, angle:0},
+	{x:15, y:15, s:3, angle:45},
+	{x:5, y:15, s:2.5, angle:45}
+];
+window.selectObject = null;
+window.defaultD = 0.1;
+
+window.edit_canvas = document.getElementById("edit_canvas");
+window.edit_context = edit_canvas.getContext("2d");
+var body = $('body');
+window.edit_canvas.width = body.width() - 6;
+window.edit_canvas.height = body.height() - 6;
+// масштаб в окне редактирования
+window.edit_m = Math.max(window.table.s / edit_canvas.width, window.table.s / edit_canvas.height);
+for (var i = 0; i < window.oList.length; i++) {
+	calcCoordinates(window.oList[i]);
+}
+drawEditCanvas();
+
+
+function drawEditCanvas() {
+	window.edit_context.clearRect(0, 0, window.edit_canvas.width, window.edit_canvas.height);
+	window.edit_context.lineWidth = 1;
+	window.edit_context.strokeStyle = "BLACK";
+	window.edit_context.strokeRect(0, 0, window.table.s / window.edit_m, window.table.s / window.edit_m);
+	for (var i = 0; i < window.oList.length; i++) {
+		drawObject(window.oList[i]);
+	}
+}
+
+function calcCoordinates(obj) {
+	obj.cos = Math.cos(-obj.angle * Math.PI / 180);
+	obj.sin = Math.sin(-obj.angle * Math.PI / 180);
+
+	var x = obj.s / 2;
+	var y = obj.s / 2;
+	obj.x1 = obj.x + x * obj.cos - y * obj.sin;
+	obj.y1 = obj.y + x * obj.sin + y * obj.cos;
+	obj.x2 = obj.x + x * obj.cos + y * obj.sin;
+	obj.y2 = obj.y + x * obj.sin - y * obj.cos;
+	obj.x3 = obj.x - x * obj.cos + y * obj.sin;
+	obj.y3 = obj.y - x * obj.sin - y * obj.cos;
+	obj.x4 = obj.x - x * obj.cos - y * obj.sin;
+	obj.y4 = obj.y - x * obj.sin + y * obj.cos;
+}
+
+function drawObject(obj) {
+	window.edit_context.lineWidth = 1;
+	if (obj.select == true) {
+		window.edit_context.strokeStyle = "RED";
+	}
+	else {
+		window.edit_context.strokeStyle = "BLACK";
+	}
+//		window.edit_context.strokeRect(x1, y1, w1, h1);
+
+	window.edit_context.beginPath();
+	window.edit_context.moveTo(obj.x1 / window.edit_m, obj.y1 / window.edit_m);
+	window.edit_context.lineTo(obj.x2 / window.edit_m, obj.y2 / window.edit_m);
+	window.edit_context.lineTo(obj.x3 / window.edit_m, obj.y3 / window.edit_m);
+	window.edit_context.lineTo(obj.x4 / window.edit_m, obj.y4 / window.edit_m);
+	window.edit_context.closePath();
+	window.edit_context.stroke();
+
+}
+
+function ie_event(e) {
+	if (e === undefined) {
+		return window.event;
+	}
+	return e;
+}
+
+window.edit_canvas.onmousedown = function (e) {
+	var evnt = ie_event(e);
+	var sx = evnt.offsetX * window.edit_m;
+	var sy = evnt.offsetY * window.edit_m;
+
+	if (window.selectObject != null)
+		window.selectObject.select = false;
+
+	window.selectObject = null;
+	// поиск обекта под указателем
+	var pClick = new Point2D(sx, sy);
+	for (var i = window.oList.length - 1; window.selectObject == null && i >= 0; i--) {
+
+		var p1 = new Point2D(window.oList[i].x1, window.oList[i].y1);
+		var p2 = new Point2D(window.oList[i].x2, window.oList[i].y2);
+		var p3 = new Point2D(window.oList[i].x3, window.oList[i].y3);
+		var p4 = new Point2D(window.oList[i].x4, window.oList[i].y4);
+		var d1 = new Segment2D(p1, p2).distance(pClick);
+		var d2 = new Segment2D(p2, p3).distance(pClick);
+		var d3 = new Segment2D(p3, p4).distance(pClick);
+		var d4 = new Segment2D(p4, p1).distance(pClick);
+		if ((d1 >= 0 && d2 >= 0 && d3 >= 0 && d4 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0 && d4 <= 0)) {
+			window.selectObject = window.oList[i];
+			window.selectObject.select = true;
+			window.editMove = 1;
+			x = evnt.clientX;
+			y = evnt.clientY;
+		}
+	}
+	drawEditCanvas();
+}
+
+window.edit_canvas.onmouseup = function (e) {
+	if (window.editMove > 0) {
+		window.editMove = 0;
+		adhesion(window.selectObject);
+	}
+	drawEditCanvas();
+}
+
+window.edit_canvas.onmouseout = window.edit_canvas.onmouseup
+
+window.edit_canvas.onmousemove = function (e) {
+	var evnt = ie_event(e);
+	var sx = evnt.offsetX * window.edit_m;
+	var sy = evnt.offsetY * window.edit_m;
+
+	if (window.editMove == 1) {
+		// перемещение обекта
+		var dx = (evnt.clientX - x) * window.edit_m;
+		var dy = -(evnt.clientY - y) * window.edit_m;
+		if (dx != 0 || dy != 0) {
+			window.selectObject.x += dx;
+			window.selectObject.y -= dy;
+			calcCoordinates(window.selectObject)
+			drawEditCanvas();
+			x = evnt.clientX;
+			y = evnt.clientY;
+		}
+	}
+}
+
+function adhesion(obj) {
+	var move = {f:false};
+
+	var bp1 = new Point2D(obj.x1, obj.y1);
+	var bp2 = new Point2D(obj.x2, obj.y2);
+	var bp3 = new Point2D(obj.x3, obj.y3);
+	var bp4 = new Point2D(obj.x4, obj.y4);
+
+	var bxMin = Math.min(obj.x1, obj.x2, obj.x3, obj.x4);
+	var byMin = Math.min(obj.y1, obj.y2, obj.y3, obj.y4);
+	var bxMax = Math.max(obj.x1, obj.x2, obj.x3, obj.x4);
+	var byMax = Math.max(obj.y1, obj.y2, obj.y3, obj.y4);
+
+	adhesionBorder(bxMin, bxMax, byMin, byMax, obj, move);
+
+	for (var i = 0; !move.f && i < window.oList.length; i++) {
+		if (window.oList[i] != obj) {
+			var axMin = Math.min(window.oList[i].x1, window.oList[i].x2, window.oList[i].x3, window.oList[i].x4);
+			var ayMin = Math.min(window.oList[i].y1, window.oList[i].y2, window.oList[i].y3, window.oList[i].y4);
+			var axMax = Math.max(window.oList[i].x1, window.oList[i].x2, window.oList[i].x3, window.oList[i].x4);
+			var ayMax = Math.max(window.oList[i].y1, window.oList[i].y2, window.oList[i].y3, window.oList[i].y4);
+
+			var intersectionX = (axMin <= bxMin && axMax >= bxMin)
+					|| (axMin <= bxMax && axMax >= bxMax)
+					|| (axMin <= bxMin && axMin >= bxMax)
+					|| (axMax <= bxMax && axMax >= bxMin);
+			var intersectionY = (ayMin <= byMin && ayMax >= byMin)
+					|| (ayMin <= byMax && ayMax >= byMax)
+					|| (ayMin <= byMin && ayMin >= byMax)
+					|| (ayMax <= byMax && ayMax >= byMin);
+
+			var ap1 = new Point2D(window.oList[i].x1, window.oList[i].y1);
+			var ap2 = new Point2D(window.oList[i].x2, window.oList[i].y2);
+			var ap3 = new Point2D(window.oList[i].x3, window.oList[i].y3);
+			var ap4 = new Point2D(window.oList[i].x4, window.oList[i].y4);
+
+			adhesionPoint(ap1, bp1, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap1, bp2, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap1, bp3, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap1, bp4, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap2, bp1, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap2, bp2, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap2, bp3, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap2, bp4, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap3, bp1, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap3, bp2, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap3, bp3, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap3, bp4, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap4, bp1, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap4, bp2, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap4, bp3, obj, move, intersectionX, intersectionY);
+			adhesionPoint(ap4, bp4, obj, move, intersectionX, intersectionY);
+
+			adhesionSegment(new Segment2D(ap1, ap2), bp1, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap2, ap3), bp1, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap3, ap4), bp1, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap4, ap1), bp1, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap1, ap2), bp2, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap2, ap3), bp2, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap3, ap4), bp2, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap4, ap1), bp2, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap1, ap2), bp3, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap2, ap3), bp3, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap3, ap4), bp3, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap4, ap1), bp3, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap1, ap2), bp4, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap2, ap3), bp4, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap3, ap4), bp4, obj, move, intersectionX, intersectionY);
+			adhesionSegment(new Segment2D(ap4, ap1), bp4, obj, move, intersectionX, intersectionY);
+
+		}
+	}
+
+	if (move.f)
+		calcCoordinates(obj);
+}
+
+function adhesionBorder(bxMin, bxMax, byMin, byMax, obj, move) {
+	if (bxMin < 10 * window.edit_m) {
+		obj.x += window.defaultD - bxMin;
+		move.f = true;
+	} else if (bxMax > window.table.s - 10 * window.edit_m) {
+		obj.x += window.table.s - bxMax - window.defaultD;
+		move.f = true;
+	}
+	if (byMin < 10 * window.edit_m) {
+		obj.y += window.defaultD - byMin;
+		move.f = true;
+	} else if (byMax > window.table.s - 10 * window.edit_m) {
+		obj.y += window.table.s - byMax - window.defaultD;
+		move.f = true;
+	}
+}
+
+function adhesionPoint(p1, p2, obj, move, intersectionX, intersectionY) {
+	if (!move.f && p1.distance(p2) < 10 * window.edit_m) {
+		if (intersectionX)
+			obj.x += p1.x - p2.x;
+		else
+			obj.x += p1.x - p2.x + ((p1.x < p2.x) ? window.defaultD : -window.defaultD);
+		if (intersectionY)
+			obj.y += p1.y - p2.y
+		else
+			obj.y += p1.y - p2.y + ((p1.y < p2.y) ? window.defaultD : -window.defaultD);
+		move.f = true;
+//		alert('p1:' + p1.x + 'x' + p1.y + ' p2:' + p2.x + 'x' + p2.y);
+	}
+}
+
+function adhesionSegment(s, p, obj, move, intersectionX, intersectionY) {
+	if (!move.f) {
+		var dx = s.p2.x - s.p1.x;
+		var dy = s.p2.y - s.p1.y;
+		// находит точку касания пенпендикуляра
+		var xo = (s.p1.x * dy * dy + p.x * dx * dx + dx * dy * (p.y - s.p1.y))
+				/ (dy * dy + dx * dx);
+		// если точка касания лежит на отрезке
+		if (xo <= Math.max(s.p1.x, s.p2.x) && xo >= Math.min(s.p1.x, s.p2.x)) {
+			var yo = p.y;
+			if (dx != 0) {
+				yo = dy * (xo - s.p1.x) / dx + s.p1.y;
+			}
+			if (yo <= Math.max(s.p1.y, s.p2.y) && yo >= Math.min(s.p1.y, s.p2.y)) {
+				// если растояние от точки до линии меньше прилипания
+				if (p.distance(new Point2D(xo, yo)) < 10 * window.edit_m) {
+					if (intersectionX)
+						obj.x += xo - p.x;
+					else
+						obj.x += xo - p.x + ((xo < p.x) ? window.defaultD : -window.defaultD);
+					if (intersectionY)
+						obj.y += yo - p.y;
+					else
+						obj.y += yo - p.y + ((yo < p.y) ? window.defaultD : -window.defaultD);
+					move.f = true;
+//					alert('segment:' + s.p1.x + 'x' + s.p1.y + ' ' + s.p2.x + 'x' + s.p2.y + ' p:' + p.x + 'x' + p.y);
+				}
+			}
+		}
+	}
+}
+
+
+</script>
+</body>
+
+</html>
